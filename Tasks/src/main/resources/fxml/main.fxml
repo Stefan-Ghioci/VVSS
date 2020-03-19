@@ -26,7 +26,7 @@
          <children>
             <TableView fx:id="tasks" prefHeight="232.0" prefWidth="760.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <columns>
-                <TableColumn fx:id="columnTitle" prefWidth="348.0" text="Title" />
+                <TableColumn fx:id="columnDescription" prefWidth="348.0" text="Description" />
                 <TableColumn fx:id="columnTime" prefWidth="214.0" text="Time" />
                   <TableColumn fx:id="columnRepeated" prefWidth="197.0" text="Repeated" />
               </columns>

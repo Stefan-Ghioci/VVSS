@@ -39,7 +39,7 @@ public class Controller {
     @FXML
     public  TableView tasks;
     @FXML
-    private TableColumn<Task, String> columnTitle;
+    private TableColumn<Task, String> columnDescription;
     @FXML
     private TableColumn<Task, String> columnTime;
     @FXML
@@ -73,7 +73,7 @@ public class Controller {
     @FXML
     public void initialize(){
         log.info("Main controller initializing");
-        columnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        columnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         columnTime.setCellValueFactory(new PropertyValueFactory<>("formattedDateStart"));
         columnRepeated.setCellValueFactory(new PropertyValueFactory<>("formattedRepeated"));
     }

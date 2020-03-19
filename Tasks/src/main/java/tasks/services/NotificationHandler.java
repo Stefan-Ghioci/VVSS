@@ -60,7 +60,7 @@ public class NotificationHandler extends Thread {
     public static void showNotification(Task task){
         log.info("push notification showing");
         Platform.runLater(() -> {
-            Notifications.create().title("Task reminder").text("It's time for " + task.getTitle()).showInformation();
+            Notifications.create().title("Task reminder").text("It's time for " + task.getDescription()).showInformation();
         });
     }
     private static long getTimeInMinutes(Date date){

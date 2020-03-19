@@ -9,7 +9,7 @@ import java.util.Date;
 
 
 public class Task implements Serializable, Cloneable {
-    private String title;
+    private String description;
     private Date time;
     private Date start;
     private Date end;
@@ -22,17 +22,17 @@ public class Task implements Serializable, Cloneable {
     public static SimpleDateFormat getDateFormat(){
         return sdf;
     }
-    public Task(String title, Date time){
+    public Task(String description, Date time){
         if (time.getTime() < 0) {
             log.error("time below bound");
             throw new IllegalArgumentException("Time cannot be negative");
         }
-        this.title = title;
+        this.description = description;
         this.time = time;
         this.start = time;
         this.end = time;
     }
-    public Task(String title, Date start, Date end, int interval){
+    public Task(String description, Date start, Date end, int interval){
         if (start.getTime() < 0 || end.getTime() < 0) {
             log.error("time below bound");
             throw new IllegalArgumentException("Time cannot be negative");
@@ -41,19 +41,19 @@ public class Task implements Serializable, Cloneable {
             log.error("interval < than 1");
             throw new IllegalArgumentException("interval should me > 1");
         }
-        this.title = title;
+        this.description = description;
         this.start = start;
         this.end = end;
         this.interval = interval;
         this.time = start;
     }
 
-    public String getTitle() {
-        return title;
+    public String getDescription() {
+        return description;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setDescription(String description) {
+        this.description = description;
     }
     public boolean isActive(){
         return this.active;
@@ -147,12 +147,12 @@ public class Task implements Serializable, Cloneable {
         if (!end.equals(task.end)) return false;
         if (interval != task.interval) return false;
         if (active != task.active) return false;
-        return title.equals(task.title);
+        return description.equals(task.description);
     }
 
     @Override
     public int hashCode() {
-        int result = title.hashCode();
+        int result = description.hashCode();
         result = 31 * result + time.hashCode();
         result = 31 * result + start.hashCode();
         result = 31 * result + end.hashCode();
@@ -164,13 +164,13 @@ public class Task implements Serializable, Cloneable {
     @Override
     public String toString() {
         return "Task{" +
-                "title='" + title + '\'' +
-                ", time=" + time +
-                ", start=" + start +
-                ", end=" + end +
-                ", interval=" + interval +
-                ", active=" + active +
-                '}';
+               "description='" + description + '\'' +
+               ", time=" + time +
+               ", start=" + start +
+               ", end=" + end +
+               ", interval=" + interval +
+               ", active=" + active +
+               '}';
     }
     @Override
     protected Task clone() throws CloneNotSupportedException {

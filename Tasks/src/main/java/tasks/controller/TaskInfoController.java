@@ -11,7 +11,7 @@ public class TaskInfoController {
 
     private static final Logger log = Logger.getLogger(TaskInfoController.class.getName());
     @FXML
-    private Label labelTitle;
+    private Label labelDescription;
     @FXML
     private Label labelStart;
     @FXML
@@ -25,7 +25,7 @@ public class TaskInfoController {
     public void initialize(){
         log.info("task info window initializing");
         Task currentTask = (Task)Controller.mainTable.getSelectionModel().getSelectedItem();
-        labelTitle.setText("Title: " + currentTask.getTitle());
+        labelDescription.setText("Description: " + currentTask.getDescription());
         labelStart.setText("Start time: " + currentTask.getFormattedDateStart());
         labelEnd.setText("End time: " + currentTask.getFormattedDateEnd());
         labelInterval.setText("Interval: " + currentTask.getFormattedRepeated());

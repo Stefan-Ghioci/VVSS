@@ -27,8 +27,7 @@ public class TaskRepository
         try {
             dataOutputStream.writeInt(tasks.size());
             for (Task t : tasks){
-                dataOutputStream.writeInt(t.getTitle().length());
-                dataOutputStream.writeUTF(t.getTitle());
+                dataOutputStream.writeUTF(t.getDescription());
                 dataOutputStream.writeBoolean(t.isActive());
                 dataOutputStream.writeInt(t.getRepeatInterval());
                 if (t.isRepeated()){
@@ -49,18 +48,17 @@ public class TaskRepository
         try {
             int listLength = dataInputStream.readInt();
             for (int i = 0; i < listLength; i++){
-                int titleLength = dataInputStream.readInt();
-                String title = dataInputStream.readUTF();
+                String description = dataInputStream.readUTF();
                 boolean isActive = dataInputStream.readBoolean();
                 int interval = dataInputStream.readInt();
                 Date startTime = new Date(dataInputStream.readLong());
                 Task taskToAdd;
                 if (interval > 0){
                     Date endTime = new Date(dataInputStream.readLong());
-                    taskToAdd = new Task(title, startTime, endTime, interval);
+                    taskToAdd = new Task(description, startTime, endTime, interval);
                 }
                 else {
-                    taskToAdd = new Task(title, startTime);
+                    taskToAdd = new Task(description, startTime);
                 }
                 taskToAdd.setActive(isActive);
                 tasks.add(taskToAdd);
@@ -146,18 +144,18 @@ public class TaskRepository
     private static Task getTaskFromString (String line){
         boolean isRepeated = line.contains("from");//if contains - means repeated
         boolean isActive = !line.contains("inactive");//if doesnt have inactive - means active
-        //Task(String title, Date time)   Task(String title, Date start, Date end, int interval)
+        //Task(String description, Date time)   Task(String description, Date start, Date end, int interval)
         Task result;
-        String title = getTitleFromText(line);
+        String description = getTitleFromText(line);
         if (isRepeated){
             Date startTime = getDateFromText(line, true);
             Date endTime = getDateFromText(line, false);
             int interval = getIntervalFromText(line);
-            result = new Task(title, startTime, endTime, interval);
+            result = new Task(description, startTime, endTime, interval);
         }
         else {
             Date startTime = getDateFromText(line, true);
-            result = new Task(title, startTime);
+            result = new Task(description, startTime);
         }
         result.setActive(isActive);
         return result;
@@ -243,9 +241,9 @@ public class TaskRepository
     ////service methods for writing
     private static String getFormattedTask(Task task){
         StringBuilder result = new StringBuilder();
-        String title = task.getTitle();
-        if (title.contains("\"")) title = title.replace("\"","\"\"");
-        result.append("\"").append(title).append("\"");
+        String description = task.getDescription();
+        if (description.contains("\"")) description = description.replace("\"","\"\"");
+        result.append("\"").append(description).append("\"");
 
         if (task.isRepeated()){
             result.append(" from ");
