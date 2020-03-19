@@ -8,9 +8,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import tasks.controller.Controller;
-import tasks.controller.Notificator;
+import tasks.services.NotificationHandler;
 import tasks.model.ArrayTaskList;
-import tasks.services.TaskIO;
+import tasks.repository.TaskRepository;
 import tasks.services.TasksService;
 
 import java.io.File;
@@ -37,7 +37,7 @@ public class Main extends Application {
 
         log.info("saved data reading");
         if (savedTasksFile.length() != 0) {
-            TaskIO.readBinary(savedTasksList, savedTasksFile);
+            TaskRepository.readBinary(savedTasksList, savedTasksFile);
         }
         try {
             log.info("application start");
@@ -60,7 +60,7 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(we -> {
                 System.exit(0);
             });
-        new Notificator(FXCollections.observableArrayList(service.getObservableList())).start();
+        new NotificationHandler(FXCollections.observableArrayList(service.getObservableList())).start();
     }
 
     public static void main(String[] args) {

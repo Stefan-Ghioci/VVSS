@@ -1,4 +1,4 @@
-package tasks.services;
+package tasks.repository;
 
 
 import javafx.collections.ObservableList;
@@ -13,14 +13,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class TaskIO {
+public class TaskRepository
+{
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss.SSS]");
     private static final String[] TIME_ENTITY = {" day"," hour", " minute"," second"};
     private static final int secondsInDay = 86400;
     private static final int secondsInHour = 3600;
     private static final int secondsInMin = 60;
 
-    private static final Logger log = Logger.getLogger(TaskIO.class.getName());
+    private static final Logger log = Logger.getLogger(TaskRepository.class.getName());
     public static void write(TaskList tasks, OutputStream out) throws IOException {
         DataOutputStream dataOutputStream = new DataOutputStream(out);
         try {
@@ -294,7 +295,7 @@ public class TaskIO {
             taskList.add(t);
         }
         try {
-            TaskIO.writeBinary(taskList, Main.savedTasksFile);
+            TaskRepository.writeBinary(taskList, Main.savedTasksFile);
         }
         catch (IOException e){
             log.error("IO exception reading or writing file");

@@ -1,4 +1,4 @@
-package tasks.controller;
+package tasks.services;
 
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -8,16 +8,16 @@ import tasks.model.Task;
 
 import java.util.Date;
 
-public class Notificator extends Thread {
+public class NotificationHandler extends Thread {
 
     private static final int millisecondsInSec = 1000;
     private static final int secondsInMin = 60;
 
-    private static final Logger log = Logger.getLogger(Notificator.class.getName());
+    private static final Logger log = Logger.getLogger(NotificationHandler.class.getName());
 
     private ObservableList<Task> tasksList;
 
-    public Notificator(ObservableList<Task> tasksList){
+    public NotificationHandler(ObservableList<Task> tasksList){
         this.tasksList=tasksList;
     }
 
