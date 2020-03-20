@@ -2,6 +2,7 @@ package tasks.services;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.apache.log4j.Logger;
 import tasks.model.ArrayTaskList;
 import tasks.model.Task;
 
@@ -15,6 +16,8 @@ public class TasksService {
     public TasksService(ArrayTaskList tasks){
         this.tasks = tasks;
     }
+
+    private static final Logger LOGGER = Logger.getLogger(TasksService.class.getName());
 
 
     public ObservableList<Task> getObservableList(){
@@ -40,19 +43,18 @@ public class TasksService {
         String[] units = stringTime.split(":");
         int hours = Integer.parseInt(units[0]);
         int minutes = Integer.parseInt(units[1]);
-        int result = (hours * DateService.MINUTES_IN_HOUR + minutes) * DateService.SECONDS_IN_MINUTE;
-        return result;
+        return (hours * DateService.MINUTES_IN_HOUR + minutes) * DateService.SECONDS_IN_MINUTE;
     }
 
     public Iterable<Task> filterTasks(Date start, Date end){
-        System.out.println(start);
-        System.out.println(end);
+        LOGGER.info(start);
+        LOGGER.info(end);
         ArrayList<Task> incomingTasks = new ArrayList<>();
         for (Task t : tasks) {
             Date nextTime = t.nextTimeAfter(start);
             if (nextTime != null && (nextTime.before(end) || nextTime.equals(end))) {
                 incomingTasks.add(t);
-                System.out.println(t.getDescription());
+                LOGGER.info(t.getDescription());
             }
         }
         return incomingTasks;

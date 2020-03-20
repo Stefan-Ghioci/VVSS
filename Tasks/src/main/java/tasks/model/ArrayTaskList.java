@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import java.util.*;
 
 
-public class ArrayTaskList extends TaskList{
+public class ArrayTaskList implements TaskList{
 
     private Task[] tasks;
     private int numberOfTasks;
@@ -139,11 +139,11 @@ public class ArrayTaskList extends TaskList{
     }
     @Override
     protected ArrayTaskList clone() throws CloneNotSupportedException {
-        ArrayTaskList tasks = new ArrayTaskList();
+        ArrayTaskList clone = (ArrayTaskList) super.clone();
         for (int i = 0; i < this.tasks.length; i++){
-            tasks.add(this.getTask(i));
+            clone.add(this.getTask(i));
         }
-        return tasks;
+        return clone;
 
     }
 

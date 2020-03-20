@@ -18,48 +18,54 @@ import java.io.IOException;
 
 
 public class Main extends Application {
-    public static Stage primaryStage;
-    private static final int defaultWidth = 820;
-    private static final int defaultHeight = 520;
+    private static Stage primaryStage;
+    private static final int DEFAULT_WIDTH = 820;
+    private static final int DEFAULT_HEIGHT = 520;
 
     private static final Logger log = Logger.getLogger(Main.class.getName());
 
     private ArrayTaskList savedTasksList = new ArrayTaskList();
 
     private static ClassLoader classLoader = Main.class.getClassLoader();
-    public static File savedTasksFile = new File(classLoader.getResource("data/tasks.txt").getFile());
+    private static File savedTasksFile = new File(classLoader.getResource("data/tasks.txt").getFile());
 
-    private TasksService service = new TasksService(savedTasksList);//savedTasksList);
+    private TasksService service = new TasksService(savedTasksList);
+
+    public static Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public static File getSavedTasksFile() {
+        return savedTasksFile;
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
 
 
         log.info("saved data reading");
-        if (savedTasksFile.length() != 0) {
-            TaskRepository.readBinary(savedTasksList, savedTasksFile);
+        if (getSavedTasksFile().length() != 0) {
+            TaskRepository.readBinary(savedTasksList, getSavedTasksFile());
         }
         try {
             log.info("application start");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
-            Parent root = loader.load();//loader.load(this.getClass().getResource("/fxml/main.fxml"));
+            Parent root = loader.load();
             Controller ctrl= loader.getController();
             service = new TasksService(savedTasksList);
 
             ctrl.setService(service);
             primaryStage.setTitle("Task Manager");
-            primaryStage.setScene(new Scene(root, defaultWidth, defaultHeight));
-            primaryStage.setMinWidth(defaultWidth);
-            primaryStage.setMinHeight(defaultHeight);
+            primaryStage.setScene(new Scene(root, DEFAULT_WIDTH, DEFAULT_HEIGHT));
+            primaryStage.setMinWidth(DEFAULT_WIDTH);
+            primaryStage.setMinHeight(DEFAULT_HEIGHT);
             primaryStage.show();
         }
         catch (IOException e){
-            e.printStackTrace();
+            log.error(e);
             log.error("error reading main.fxml");
         }
-        primaryStage.setOnCloseRequest(we -> {
-                System.exit(0);
-            });
+        primaryStage.setOnCloseRequest(we -> System.exit(0));
         new NotificationHandler(FXCollections.observableArrayList(service.getObservableList())).start();
     }
 
