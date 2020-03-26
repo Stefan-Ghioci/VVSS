@@ -195,6 +195,10 @@ public class NewEditController {
 
     private Task validateTask(String newDescription, Date newStartDate, Date newEndDate, boolean repeated, boolean isActive, int newInterval) {
         Task collectedFieldsTask;
+
+        if (newDescription.length() == 0 || newDescription.length() > 255)
+            throw new IllegalArgumentException("Description is too long.");
+
         if (repeated) {
             if (newStartDate.after(newEndDate))
                 throw new IllegalArgumentException("Start date should be before end");
