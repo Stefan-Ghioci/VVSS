@@ -7,24 +7,16 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import tasks.model.Task;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.Calendar;
 import java.util.Date;
 
+
 @SuppressWarnings("deprecation")
 class NewEditControllerTest {
-
-
-    private int startYear;
-    private int startMonth;
-    private int startDay;
-    private NewEditController controller;
-    private boolean repeated;
-    private boolean isActive;
-    private int interval;
-    private Date startDate;
-    private ObservableList<Task> tasksList;
-    private Date validEndDate;
-
 
     private static String generateString(int length) {
         //noinspection SpellCheckingInspection
@@ -36,6 +28,30 @@ class NewEditControllerTest {
 
         return string.toString();
     }
+
+    @Target({ ElementType.TYPE, ElementType.METHOD })
+    @Retention(RetentionPolicy.RUNTIME)
+    @Tag("valid")
+    @interface Valid {
+    }
+
+    @Target({ ElementType.TYPE, ElementType.METHOD })
+    @Retention(RetentionPolicy.RUNTIME)
+    @Tag("non-valid")
+    @interface NonValid {
+    }
+
+    private int startYear;
+    private int startMonth;
+    private int startDay;
+    private NewEditController controller;
+    private boolean repeated;
+    private boolean isActive;
+    private int interval;
+    private Date startDate;
+
+    private ObservableList<Task> tasksList;
+    private Date validEndDate;
 
     @BeforeEach
     void setUp() {
@@ -64,6 +80,7 @@ class NewEditControllerTest {
         validEndDate = null;
     }
 
+    @Valid
     @DisplayName("Should succeed if end date is not before start date when addTask is called.")
     @ParameterizedTest(name = "{0} days after start date.")
     @ValueSource(ints = {0, 1})
@@ -76,6 +93,7 @@ class NewEditControllerTest {
         Assertions.assertEquals(1, tasksList.size());
     }
 
+    @NonValid
     @DisplayName("Should fail if end date is before start date when addTask is called.")
     @ParameterizedTest(name = "{0} days before start date.")
     @ValueSource(ints = {1, 2})
@@ -87,6 +105,7 @@ class NewEditControllerTest {
                 () -> controller.addTask(description, startDate, endDate, repeated, isActive, interval));
     }
 
+    @Valid
     @DisplayName("Should succeed if description length is 1-255 when addTask is called.")
     @ParameterizedTest(name = "description length = {0}")
     @ValueSource(ints = {1, 254, 255})
@@ -98,6 +117,7 @@ class NewEditControllerTest {
         Assertions.assertEquals(1, tasksList.size());
     }
 
+    @NonValid
     @DisplayName("Should fail if description length is 256 (>255) when addTask is called.")
     @Test
     void shouldFailIfDescriptionLengthTooLongWhenAddTask() {
@@ -107,6 +127,7 @@ class NewEditControllerTest {
                 () -> controller.addTask(description, startDate, validEndDate, repeated, isActive, interval));
     }
 
+    @NonValid
     @DisplayName("Should fail if description is empty string when addTask is called.")
     @Test
     void shouldFailIfDescriptionEmptyWhenAddTask() {
@@ -116,6 +137,7 @@ class NewEditControllerTest {
                 () -> controller.addTask(description, startDate, validEndDate, repeated, isActive, interval));
     }
 
+    @NonValid
     @DisplayName("Should fail if description is null when addTask is called.")
     @Test
     void shouldFailIfDescriptionNullWhenAddTask() {
