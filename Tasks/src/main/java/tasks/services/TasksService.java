@@ -52,7 +52,13 @@ public class TasksService {
         ArrayList<Task> incomingTasks = new ArrayList<>();
         for (Task t : tasks) {
             Date nextTime = t.nextTimeAfter(start);
-            if (nextTime != null && (nextTime.before(end) || nextTime.equals(end))) {
+            if (nextTime == null) {
+                continue;
+            }
+            if (nextTime.before(end)) {
+                incomingTasks.add(t);
+                LOGGER.info(t.getDescription());
+            } else if (nextTime.equals(end)) {
                 incomingTasks.add(t);
                 LOGGER.info(t.getDescription());
             }
