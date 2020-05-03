@@ -66,5 +66,15 @@ class TasksServiceTest {
                         .map(Task::getDescription)
                         .collect(Collectors.toSet()));
     }
+    @Test
+    void WBT_TC_03() {
+        Collection<Task> filtered = (Collection<Task>) service.filterTasks(last, first);
+
+        Assertions.assertEquals(
+                Collections.EMPTY_SET,
+                filtered.stream()
+                        .map(Task::getDescription)
+                        .collect(Collectors.toSet()));
+    }
 
 }
