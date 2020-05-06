@@ -29,6 +29,7 @@ public class NewEditController {
 
     private static final Logger log = Logger.getLogger(NewEditController.class.getName());
     private String buttonType;
+    private TaskRepository taskRepository = TaskRepository.getInstance();
 
     public static void setClickedButton(Button clickedButton) {
         NewEditController.clickedButton = clickedButton;
@@ -181,7 +182,7 @@ public class NewEditController {
         for (int i = 0; i < tasksList.size(); i++) {
             if (currentTask.equals(tasksList.get(i))) {
                 tasksList.set(i, collectedFieldsTask);
-                TaskRepository.rewriteFile(tasksList);
+                taskRepository.rewriteFile(tasksList);
             }
         }
         currentTask = null;
@@ -190,7 +191,7 @@ public class NewEditController {
     public void addTask(String description, Date startDate, Date endDate, boolean repeated, boolean isActive, int interval) {
         Task collectedFieldsTask = validateTask(description, startDate, endDate, repeated, isActive, interval);
         tasksList.add(collectedFieldsTask);
-        TaskRepository.rewriteFile(tasksList);
+        taskRepository.rewriteFile(tasksList);
     }
 
     private Task validateTask(String newDescription, Date newStartDate, Date newEndDate, boolean repeated, boolean isActive, int newInterval) {

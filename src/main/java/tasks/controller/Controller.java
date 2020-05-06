@@ -54,10 +54,12 @@ public class Controller {
     private DatePicker datePickerTo;
     @FXML
     private TextField fieldTimeTo;
+    private TaskRepository taskRepository;
 
     public void setService(TasksService service){
         this.service=service;
         this.dateService=new DateService(service);
+        this.taskRepository=TaskRepository.getInstance();
         this.tasksList=service.getObservableList();
         updateCountLabel(tasksList);
         tasks.setItems(tasksList);
@@ -109,7 +111,7 @@ public class Controller {
     public void deleteTask(){
         Task toDelete = (Task)tasks.getSelectionModel().getSelectedItem();
         tasksList.remove(toDelete);
-        TaskRepository.rewriteFile(tasksList);
+        taskRepository.rewriteFile(tasksList);
     }
     @FXML
     public void showDetailedInfo(){

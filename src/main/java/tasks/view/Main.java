@@ -30,6 +30,7 @@ public class Main extends Application {
     private static File savedTasksFile = new File(classLoader.getResource("data/tasks.txt").getFile());
 
     private TasksService service = new TasksService(savedTasksList);
+    private TaskRepository taskRepository = TaskRepository.getInstance();
 
     public static Stage getPrimaryStage() {
         return primaryStage;
@@ -45,7 +46,7 @@ public class Main extends Application {
 
         log.info("saved data reading");
         if (getSavedTasksFile().length() != 0) {
-            TaskRepository.readBinary(savedTasksList, getSavedTasksFile());
+            taskRepository.readBinary(savedTasksList, getSavedTasksFile());
         }
         try {
             log.info("application start");

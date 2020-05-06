@@ -15,6 +15,8 @@ import java.util.Date;
 
 public class TaskRepository
 {
+    private static TaskRepository instance;
+
     private static SimpleDateFormat getSimpleDateFormat(){
         return new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss.SSS]");
     }
@@ -26,8 +28,15 @@ public class TaskRepository
 
     private TaskRepository(){}
 
+    public static TaskRepository getInstance(){
+        if (instance == null)
+            instance = new TaskRepository();
+        return instance;
+    }
+
     private static final Logger log = Logger.getLogger(TaskRepository.class.getName());
-    public static void write(TaskList tasks, OutputStream out) throws IOException {
+
+    public void write(TaskList tasks, OutputStream out) throws IOException {
         try (DataOutputStream dataOutputStream = new DataOutputStream(out)) {
             dataOutputStream.writeInt(tasks.size());
             for (Task t : tasks) {
@@ -43,7 +52,7 @@ public class TaskRepository
             }
         }
     }
-    public static void read(TaskList tasks, InputStream in)throws IOException {
+    public  void read(TaskList tasks, InputStream in)throws IOException {
         try (DataInputStream dataInputStream = new DataInputStream(in)) {
             int listLength = dataInputStream.readInt();
             for (int i = 0; i < listLength; i++) {
@@ -63,7 +72,7 @@ public class TaskRepository
             }
         }
     }
-    public static void writeBinary(TaskList tasks, File file)throws IOException{
+    public void writeBinary(TaskList tasks, File file)throws IOException{
         try (FileOutputStream fos = new FileOutputStream(file)) {
             write(tasks, fos);
         } catch (IOException e) {
@@ -71,14 +80,14 @@ public class TaskRepository
         }
     }
 
-    public static void readBinary(TaskList tasks, File file) throws IOException{
+    public void readBinary(TaskList tasks, File file) throws IOException{
         try (FileInputStream fis = new FileInputStream(file)) {
             read(tasks, fis);
         } catch (IOException e) {
             log.error(ERROR_MESSAGE);
         }
     }
-    public static void write(TaskList tasks, Writer out) throws IOException {
+    public void write(TaskList tasks, Writer out) throws IOException {
         BufferedWriter bufferedWriter = new BufferedWriter(out);
         Task lastTask = tasks.getTask(tasks.size()-1);
         for (Task t : tasks){
@@ -90,7 +99,7 @@ public class TaskRepository
 
     }
 
-    public static void read(TaskList tasks, Reader in)  throws IOException {
+    public void read(TaskList tasks, Reader in)  throws IOException {
         BufferedReader reader = new BufferedReader(in);
         String line;
         Task t;
@@ -101,19 +110,8 @@ public class TaskRepository
         reader.close();
 
     }
-    public static void writeText(TaskList tasks, File file) throws IOException {
-        try (FileWriter fileWriter = new FileWriter(file)) {
-            write(tasks, fileWriter);
-        } catch (IOException e) {
-            log.error(ERROR_MESSAGE);
-        }
 
-    }
-    public static void readText(TaskList tasks, File file) throws IOException {
-        try (FileReader fileReader = new FileReader(file)) {
-            read(tasks, fileReader);
-        }
-    }
+
     //// service methods for reading
     private static Task getTaskFromString (String line){
         boolean isRepeated = line.contains("from");//if contains - means repeated
@@ -267,13 +265,13 @@ public class TaskRepository
     }
 
 
-    public static void rewriteFile(ObservableList<Task> tasksList) {
+    public void rewriteFile(ObservableList<Task> tasksList) {
         LinkedTaskList taskList = new LinkedTaskList();
         for (Task t : tasksList){
             taskList.add(t);
         }
         try {
-            TaskRepository.writeBinary(taskList, Main.getSavedTasksFile());
+            writeBinary(taskList, Main.getSavedTasksFile());
         }
         catch (IOException e){
             log.error(ERROR_MESSAGE);
