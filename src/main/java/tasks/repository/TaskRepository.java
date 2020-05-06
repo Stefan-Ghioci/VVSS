@@ -24,7 +24,7 @@ public class TaskRepository
     private static final int SECONDS_IN_DAY = 86400;
     private static final int SECONDS_IN_HOUR = 3600;
     private static final int SECONDS_IN_MIN = 60;
-    private static final String ERROR_MESSAGE = "IO exception reading or writing file";
+    static final String ERROR_MESSAGE = "IO exception reading or writing file";
 
     private TaskRepository(){}
 

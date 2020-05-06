@@ -79,7 +79,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void shouldFailWhenDeleteTaskIfRepositoryThrowsError() {
+    public void shouldFailWhenDeleteTaskIfRepositoryBreaks() {
 
         given(tasks.getSelectionModel()).willReturn(model);
         given(model.getSelectedItem()).willReturn(toDelete);
@@ -91,5 +91,6 @@ public class ControllerTest {
         verify(tasks, times(1)).getSelectionModel();
         verify(model, times(1)).getSelectedItem();
         verify(taskList, times(1)).remove(toDelete);
+        verify(repository, times(1)).rewriteFile(taskList);
     }
 }
