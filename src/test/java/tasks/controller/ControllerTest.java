@@ -15,6 +15,7 @@ import javax.swing.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -62,14 +63,14 @@ public class ControllerTest {
 
 
     @Test
-    public void shouldSucceedUnderNormalCircumstances() {
+    public void shouldSucceedWhenDeleteTaskIfExpectedBehaviour() {
 
         given(tasks.getSelectionModel()).willReturn(model);
         given(model.getSelectedItem()).willReturn(toDelete);
         given(taskList.remove(toDelete)).willReturn(true);
         doNothing().when(repository).rewriteFile(taskList);
 
-        controller.deleteTask();
+        assertDoesNotThrow(()->controller.deleteTask());
 
         verify(tasks, times(1)).getSelectionModel();
         verify(model, times(1)).getSelectedItem();
@@ -78,7 +79,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void shouldFailIfRepositoryThrowsError() {
+    public void shouldFailWhenDeleteTaskIfRepositoryThrowsError() {
 
         given(tasks.getSelectionModel()).willReturn(model);
         given(model.getSelectedItem()).willReturn(toDelete);
